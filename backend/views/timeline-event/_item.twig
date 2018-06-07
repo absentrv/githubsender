@@ -1,0 +1,24 @@
+<div class="timeline-item">
+    <span class="time">
+        <i class="fa fa-clock-o"></i>
+        {{ app.formatter.asRelativeTime(model.created_at) }}
+    </span>
+    <h3 class="timeline-header">
+        {{ t('backend', 'You have new event') }}        
+    </h3>
+    <div class="timeline-body">
+        <dl>
+            <dt>{{ t('backend', 'Application') }}:</dt>
+            <dd>{{ model.application }}</dd>
+
+            <dt>{{ t('backend', 'Category') }}:</dt>
+            <dd>{{ model.category }}</dd>
+
+            <dt>{{ t('backend', 'Event') }}:</dt>
+            <dd>{{ model.event }}</dd>
+
+            <dt>{{ t('backend', 'Date') }}:</dt>
+            <dd>{{ app.formatter.asDatetime(model.created_at) }}</dd>
+        </dl>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: zein
+ * Date: 7/4/14
+ * Time: 2:31 PM
+ */
+
+namespace common\models\query;
+
+use common\models\Article;
+use yii\db\ActiveQuery;
+
+class ArticleQuery extends ActiveQuery
+{
+    public function published()
+    {
+        $this->andWhere(['status' => Article::STATUS_PUBLISHED]);
+        return $this;
+    }
+    
+    public function bySlug(string $slug) {
+        return $this->andWhere(['slug' => $slug]);
+    }
+}

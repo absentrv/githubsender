@@ -1,0 +1,17 @@
+{
+  "name": "GitSender REST api",
+  "version": "1.0.0",
+  "description": "Documentation for GitSender project",
+  "title": "GitSender API Documantation",
+  "url" : "http://api.gitsender.local/",  
+  "template": {
+  	"withCompare": false,
+  	"withGenerator": false
+  },
+  "footer": {   
+    "filename": "footer.md"
+  },
+  "header": {   
+    "filename": "header.md"
+  }
+}

@@ -1,0 +1,50 @@
+{{ use('yii/widgets/Pjax') }}
+{{ use('yii/widgets/LinkPager') }}
+{{ set(this, 'title', t('backend', 'Application timeline')) }}
+{% set icons = {
+        user : '<i class="fa fa-user bg-blue"></i>'
+    } %}
+{{ pjax_begin() }}
+<div class="row">
+    <div class="col-md-12">
+        {% if dataProvider.count > 0 %}        
+            <ul class="timeline">
+                {% for model in dataProvider.getModels() %}     
+                    {% if date is not defined or date != app.formatter.asDate(model.created_at) %}
+                        <!-- timeline time label -->
+                        <li class="time-label">
+                            <span class="bg-blue">
+                                {{ app.formatter.asDate(model.created_at) }}
+                            </span>
+                        </li>
+                        {% set date = app.formatter.asDate(model.created_at) %}                        
+                    {% endif %}
+                    <li>                        
+                        {% set viewFile = "%s/%s.twig"|format(model.category, model.event) %}
+                        {% include [
+                                        viewFile,
+                                        '_item.twig'
+                                    ] with {'model': model} %}                        
+                    </li>
+                {% endfor %}                
+                <li>
+                    <i class="fa fa-clock-o">
+                    </i>
+                </li>
+            </ul>
+        {% else %}
+            {{ t('backend', 'No events found') }}            
+        {% endif %}
+    </div>
+    <div class="col-md-12 text-center">
+        {{ 
+            link_pager_widget({
+            pagination: dataProvider.pagination,
+            options: {
+                    class: 'pagination'
+                }
+            })
+        }}        
+    </div>
+</div>
+{{ pjax_end() }}

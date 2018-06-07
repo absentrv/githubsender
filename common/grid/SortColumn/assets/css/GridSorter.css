@@ -1,0 +1,15 @@
+.sortable-widget-handler{
+    cursor: pointer;
+}
+
+tr.sorting-row{
+    border-left: 2px solid red;
+}
+
+tr.sorting-row td{
+    background: #dedede;
+}
+
+table.sorting-table tbody tr:not(.sorting-row) td {
+    opacity: 0.4;
+}

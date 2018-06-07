@@ -1,0 +1,28 @@
+{{ use('backend/assets/BackendAsset') }}
+{{ use('yii/helpers/ArrayHelper') }}
+{% set bundle = register_backend_asset() %}
+{{ void(this.beginPage()) }}
+<!DOCTYPE html>
+<html lang="{{ app.language }}">
+    <head>
+        <meta charset="{{ app.charset }}">
+        <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+        {{ html.csrfMetaTags | raw }}
+        <title>{{ html.encode(this.title) }}</title>
+        {{ void(this.head()) }}
+    </head>
+    <body class="{{ [
+this.params['body-class'],
+app.keyStorage.get('backend.theme-skin', 'skin-blue'),
+app.keyStorage.get('backend.layout-fixed') > 0 ? 'fixed' : null,
+app.keyStorage.get('backend.layout-boxed') > 0 ? 'layout-boxed' : null,
+app.keyStorage.get('backend.layout-collapsed-sidebar') > 0 ? 'sidebar-collapse' : null,
+]|join(' ') }}">
+    {{ void(this.beginBody()) }}
+        {% block content %}
+            {{ content | raw }}
+        {% endblock %}
+    {{ void(this.endBody()) }}
+</body>
+</html>
+{{ void(this.endPage()) }}

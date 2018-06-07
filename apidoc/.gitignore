@@ -1,0 +1,9 @@
+# Env
+/bin/*
+/dev/*
+/etc/*
+/lib/*
+/lib64/*
+/proc/*
+/boot/*
+/home/*

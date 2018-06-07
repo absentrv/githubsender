@@ -1,0 +1,235 @@
+{% extends "base.twig" %} 
+{% block content %}
+    {{ use('backend/assets/BackendAsset') }}
+    {{ use('backend/models/SystemLog') }}
+    {{ use('backend/widgets/Menu') }}
+    {{ use('yii/bootstrap/Alert') }}
+    {{ use('yii/helpers/ArrayHelper') }}
+    {{ use('yii/log/Logger') }}
+    {{ use('yii/widgets/Breadcrumbs') }}
+    {% set bundle = register_backend_asset() %}
+    <div class="wrapper">
+        <!-- header logo: style can be found in header.less -->
+        <header class="main-header">
+            <a href="{{ app.urlManagerFrontend.createAbsoluteUrl('/') }}" class="logo">
+                <!-- Add the class icon to your logo image or logo icon to add the margining -->
+                {{ app.name}}            
+            </a>
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top" role="navigation">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">{{ t('backend', 'Toggle navigation') }}</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <li id="timeline-notifications" class="notifications-menu">
+                            <a href="/timeline-event/index">
+                                <i class="fa fa-bell"></i>
+                                <span class="label label-success">
+                                    {{ this.params.timelineEventCount }}
+                                </span>
+                            </a>
+                        </li>
+                        <!-- Notifications: style can be found in dropdown.less -->
+                        <li id="log-dropdown" class="dropdown notifications-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-warning"></i>
+                                <span class="label label-danger">
+                                    {{ this.params.systemLogCount }}    
+                                </span>
+                            </a>                        
+                        </li>
+                        <!-- User Account: style can be found in dropdown.less -->
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="{{ app.user.identity.userProfile.getAvatar(this.assetManager.getAssetUrl(bundle, 'img/anonymous.jpg')) }}"
+                                     class="user-image">
+                                <span>{{ app.user.identity.username }} <i class="caret"></i></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header light-blue">
+                                    <img src="{{ app.user.identity.userProfile.getAvatar(this.assetManager.getAssetUrl(bundle, 'img/anonymous.jpg')) }}"
+                                         class="img-circle" alt="User Image"/>
+                                    <p>
+                                        {{ app.user.identity.username }}
+                                        <small>
+                                            {{ t('backend', 'Member since {0, date, short}', app.user.identity.created_at) }}
+                                        </small>
+                                </li>
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        {{ html.a(t('backend', 'Profile'), '/sign-in/profile', {class: 'btn btn-default btn-flat'}) | raw }}
+                                    </div>
+                                    <div class="pull-left">
+                                        {{ html.a(t('backend', 'Account'), '/sign-in/account', {class: 'btn btn-default btn-flat'}) | raw }}
+                                    </div>
+                                    <div class="pull-right">
+                                        {{ html.a(t('backend', 'Logout'), '/sign-in/logout', {class: 'btn btn-default btn-flat',  'data-method': 'post'}) | raw }}
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            {{ html.a('<i class="fa fa-cogs"></i>', '/site/settings') | raw }}
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- Left side column. contains the logo and sidebar -->
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar">
+                <!-- Sidebar user panel -->
+                <div class="user-panel">
+                    <div class="pull-left image">
+                        <img src="{{ app.user.identity.userProfile.getAvatar(this.assetManager.getAssetUrl(bundle, 'img/anonymous.jpg')) }}"
+                             class="img-circle"/>
+                    </div>
+                    <div class="pull-left info">
+                        <p>{{ "Привіт " ~ app.user.identity.getPublicIdentity() }}</p>
+                        <a href="{{ path('/sign-in/profile') }}">
+                            <i class="fa fa-circle text-success"></i>
+                            {{ app.formatter.asDatetime('now'|date('U')) }}
+                        </a>
+                    </div>
+                </div>
+                <!-- sidebar menu: : style can be found in sidebar.less -->
+                {{ menu_widget({
+                    'options': {
+                        'class': 'sidebar-menu'
+                    },
+                    'linkTemplate': '<a href="{url}">{icon}<span>{label}</span>{right-icon}{badge}</a>',
+                    'submenuTemplate': '\n<ul class=\"treeview-menu\">\n{items}\n</ul>\n',
+                    'activateParents': true,
+                    'items': [
+                        {
+                            'label': "Основне",
+                            'options': {'class': 'header'}
+                        },
+                        {
+                             'label': t('backend', 'Timeline'),
+                             'icon': '<i class="fa fa-bar-chart-o"></i>',
+                             'url': '/timeline-event/index',
+                             'badge': this.params.timelineEventCount,
+                             'badgeBgClass': 'label-success',
+                        },
+                        {
+                             'label': "Контент",
+                             'url': '#',
+                             'icon': '<i class="fa fa-edit"></i>',
+                             'options': {'class': 'treeview'},
+                             'active': app.controller.id in ['page', 'article', 'article-category', 'banner', 'logo', 'product-category', 'about-slider'],
+                             'items': [
+                                {'label': 'Статичні сторінки', 'url': '/page/index', 'icon': '<i class="fa fa-angle-double-right"></i>', 'active': app.controller.id == 'page'},
+                                {'label': 'Картинки на сторінку "Про нас"', 'url': '/about-slider/index', 'icon': '<i class="fa fa-angle-double-right"></i>', 'active': app.controller.id == 'about-slider'},
+                                {'label': "Банери на головну", 'url': '/banner/index', 'icon': '<i class="fa fa-angle-double-right"></i>', 'active': app.controller.id == 'banner'},                                               
+                                {'label': "Логотипи", 'url': '/logo/index', 'icon': '<i class="fa fa-angle-double-right"></i>', 'active': app.controller.id == 'logo'},                                               
+                                {'label': "Статті", 'url': '/article/index', 'icon': '<i class="fa fa-angle-double-right"></i>', 'active': app.controller.id == 'article'},                                               
+                                {'label': "Категорії товарів", 'url': '/product-category/index', 'icon': '<i class="fa fa-angle-double-right"></i>', 'active': app.controller.id == 'product-category'},                                               
+                             ],
+                        },
+                        {
+                             'label': "Контакти",
+                             'options': {'class': 'header'}
+                        },
+                        {
+                            'label': "Контактна інформація", 
+                            'url': '/contact/index', 
+                            'icon': '<i class="fa fa-angle-double-right"></i>', 
+                            'active': app.controller.id == 'contact'
+                        },
+                        {
+                            'label': "Зворотній зв'язок", 
+                            'url': '/feedback/index', 
+                            'icon': '<i class="fa fa-angle-double-right"></i>', 
+                            'active': app.controller.id == 'feedback'
+                        },
+                        {
+                            'label': "Коментарі до товарів", 
+                            'url': '/comment/index', 
+                            'icon': '<i class="fa fa-angle-double-right"></i>', 
+                            'active': app.controller.id == 'comment'
+                        },
+                        {'label': "Контакти працівників", 'url': '/contact-person/index', 'icon': '<i class="fa fa-angle-double-right"></i>', 'active': app.controller.id == 'contact-person'},                                               
+
+                        {
+                             'label': "Система",
+                             'options': {'class': 'header'}
+                        },
+                        {
+                             'label': "Користувачі",
+                             'icon': '<i class="fa fa-users"></i>',
+                             'url': '/user/index',
+                             'active': app.controller.id == 'user',
+                             'visible': app.user.can('administrator')
+                        },
+                        {
+                             'label': "Інше",
+                             'url': '#',
+                             'icon': '<i class="fa fa-cogs"></i>',
+                             'options': {'class': 'treeview'},
+                             'active': app.controller.id in ['key-storage', 'file-storage', 'cache', 'file-manager', 'system-information', 'log'],
+                             'items': [                             
+                                {'label': t('backend', 'Key-Value Storage'), 'url': '/key-storage/index', 'icon': '<i class="fa fa-angle-double-right"></i>', 'active': app.controller.id == 'key-storage'},
+                                {'label': t('backend', 'File Storage'), 'url': '/file-storage/index', 'icon': '<i class="fa fa-angle-double-right"></i>', 'active': app.controller.id == 'file-storage'},
+                                {'label': t('backend', 'Cache'), 'url': '/cache/index', 'icon': '<i class="fa fa-angle-double-right"></i>'},
+                                {'label': t('backend', 'File Manager'), 'url': '/file-manager/index', 'icon': '<i class="fa fa-angle-double-right"></i>'},
+                                 {
+                                 'label': t('backend', 'System Information'),
+                                 'url': '/system-information/index',
+                                 'icon': '<i class="fa fa-angle-double-right"></i>'
+                                 },
+{
+                             'label': t('backend', 'Logs'),
+                             'url': '/log/index',
+                             'icon': '<i class="fa fa-angle-double-right"></i>',
+                             'badge': this.params.systemLogCount,
+                             'badgeBgClass': 'label-danger',
+                             },          
+                            ]
+},
+
+                    ]
+                }) }}                
+            </section>
+            <!-- /.sidebar -->
+        </aside>
+
+        <!-- Right side column. Contains the navbar and content of the page -->
+        <aside class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>
+                    {{ this.title }}
+                    {% if this.params['subtitle'] is defined %}                    
+                        <small>{{ this.params['subtitle'] }}</small>
+                    {% endif %}
+                </h1>
+                {{ breadcrumbs_widget({
+                    tag: 'ol',
+                    links: this.params.breadcrumbs is defined ? this.params.breadcrumbs : []
+                }) }}                
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                {% if app.session.hasFlash('alert') %}
+                    {{ alert_widget({
+                    body: app.session.getFlash('alert')['body'],
+                    options: app.session.getFlash('alert')['options']
+}) }}
+                {% endif %}
+                {% block main %}
+                    {{ content | raw}}
+                {% endblock %}            
+            </section><!-- /.content -->
+        </aside><!-- /.right-side -->
+    </div><!-- ./wrapper -->
+{% endblock %}
