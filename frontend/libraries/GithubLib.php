@@ -13,7 +13,7 @@ class GithubLib
 {
     private $apiUrl = 'https://api.github.com/users/';    
     private $client;
-    private $token = '432fa6bab54184c7da97a7061218fed7887866c0';
+    private $token = '9b0fd44f307e5f675c6dfb3d5a0e54abedc087aa';
     
     
     public function __construct(\yii\base\Component $client)
@@ -30,10 +30,7 @@ class GithubLib
                 'Authorization' => 'Bearer '. $this->token
                 ])
             ->setUrl($this->apiUrl . $username)
-            ->send();       
-        echo '<pre>';
-        print_r($response);
-        die();
+            ->send();              
         if($response->isOk) {
             return json_decode($response->content);
         }
