@@ -33,8 +33,8 @@ class SendMessageModel extends Model
         $weatherLib = new OpenweathermapLib($client);
         foreach ($this->users as $key => $one) {
             $gitHubInfo = $gitHubApi->getUserInfo($one);
-            if (!$gitHubInfo) {
-                $this->addError("users", "User `{$one}` not found :(");
+            if (!$gitHubInfo || empty($gitHubInfo->email)) {
+                $this->addError("users", "User `{$one}` not found :( OR doesn`t has public email'");
                 continue;
             }
             $weatherInfo = $weatherLib->getWeather($gitHubInfo->location);
