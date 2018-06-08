@@ -13,11 +13,11 @@ class GithubLib
 {
     private $apiUrl = 'https://api.github.com/users/';    
     private $client;
-    private $token = '9b0fd44f307e5f675c6dfb3d5a0e54abedc087aa';
-    
+    private $token;
     
     public function __construct(\yii\base\Component $client)
     {
+        $this->token = env('GITHUB_TOKEN');
         $this->client = $client;
     }
     
