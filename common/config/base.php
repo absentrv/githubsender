@@ -188,8 +188,8 @@ if (YII_ENV_PROD) {
     $config['components']['mailer']['transport'] = [
         'class' => 'Swift_SmtpTransport',
         'host' => 'smtp.gmail.com',
-        'port' => env('SMTP_PORT'),
-        'encryption' => 'tls',
+        'port' => 465,
+        'encryption' => 'ssl',
         'username' => env('ROBOT_EMAIL'),
         'password' => env('SMTP_PASSWORD'),
     ];
