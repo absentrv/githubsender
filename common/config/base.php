@@ -4,8 +4,8 @@ $config = [
     'name' => 'GitSender',
     'vendorPath' => __DIR__ . '/../../vendor',
     'extensions' => require(__DIR__ . '/../../vendor/yiisoft/extensions.php'),
-    'sourceLanguage' => 'uk-UA',
-    'language' => 'uk-UA',
+    'sourceLanguage' => 'en-US',
+    'language' => 'en-US',
     'bootstrap' => ['log'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
@@ -38,7 +38,6 @@ $config = [
         ],
         'formatter' => [
             'class' => yii\i18n\Formatter::class,
-            'currencyCode' => 'грн.'            
         ],
         'glide' => [
             'class' => trntv\glide\components\Glide::class,
@@ -120,9 +119,7 @@ $config = [
                 'component' => 'fileStorage'
             ]
         ],
-        'keyStorage' => [
-            'class' => common\components\keyStorage\KeyStorage::class
-        ],
+    
         'urlManagerBackend' => \yii\helpers\ArrayHelper::merge(
                 [
             'hostInfo' => env('BACKEND_HOST_INFO'),

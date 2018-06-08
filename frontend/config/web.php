@@ -1,30 +1,20 @@
 <?php
-
 $config = [
     'homeUrl' => Yii::getAlias('@frontendUrl'),
     'controllerNamespace' => 'frontend\controllers',
     'defaultRoute' => 'site/index',
     'bootstrap' => ['maintenance'],
     'modules' => [
-        'user' => [
-            'class' => frontend\modules\user\Module::class,
-            'shouldBeActivated' => false,
-            'enableLoginByPass' => false,
-        ],
+//        'user' => [
+//            'class' => frontend\modules\user\Module::class,
+//            'shouldBeActivated' => false,
+//            'enableLoginByPass' => false,
+//        ],
         'api' => [
             'class' => frontend\modules\api\Module::class,
             'modules' => [
-                'v1' => frontend\modules\api\v1\Module::class
-            ],
-            'as globalAccess' => [
-                'class' => common\behaviors\GlobalAccessBehavior::class,
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => ['api_user'],
-                    ]
-                ]
-            ],
+                'v1' => frontend\modules\api\v1\Module::class,                
+            ]
         ]
     ],
     'on beforeRequest' => function ($event) {
@@ -36,7 +26,7 @@ $config = [
             Yii::warning($data, 'api');
         }
     },
-    'components' => [        
+    'components' => [
         'errorHandler' => [
             'errorAction' => 'site/error'
         ],
@@ -46,7 +36,6 @@ $config = [
                 if (env('APP_MAINTENANCE') === '1') {
                     return true;
                 }
-                return $app->keyStorage->get('frontend.maintenance') === 'enabled';
             }
         ],
         'request' => [
@@ -61,7 +50,7 @@ $config = [
             'loginUrl' => ['/user/sign-in/login'],
             'enableAutoLogin' => true,
             'as afterLogin' => common\behaviors\LoginTimestampBehavior::class
-        ],        
+        ],
     ]
 ];
 

@@ -3,15 +3,8 @@
   "version": "1.0.0",
   "description": "Documentation for GitSender project",
   "title": "GitSender API Documantation",
-  "url" : "http://api.gitsender.local/",  
-  "template": {
-  	"withCompare": false,
-  	"withGenerator": false
-  },
+  "url" : "http://githubsender.zzz.com.ua/api/v1",   
   "footer": {   
     "filename": "footer.md"
-  },
-  "header": {   
-    "filename": "header.md"
   }
 }

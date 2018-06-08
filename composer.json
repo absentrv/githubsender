@@ -55,14 +55,7 @@
     "symfony/process": "^4.0",
     "guzzlehttp/guzzle": "^6.0",
     "yiisoft/yii2-twig": "^2.2",
-    "creocoder/yii2-translateable": "^1.0",
-    "npm-asset/ion-rangeslider": "^2.2",
-    "bower-asset/slick-carousel": "^1.8",
-    "bower-asset/magnific-popup": "^1.1",
-    "omnilight/yii2-shopping-cart": "*",
-    "lis-dev/nova-poshta-api-2": "dev-master",
-    "kartik-v/yii2-widget-select2": "@dev",
-    "porcelanosa/yii2-magnific-popup": "master-dev"    
+    "cmfcmf/openweathermap-php-api": "^2.3"    
   },
   "require-dev": {
     "yiisoft/yii2-debug": "^2.0.0",
