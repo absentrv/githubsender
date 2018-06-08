@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Documentation for GitSender project",
   "title": "GitSender API Documantation",
-  "url" : "http://githubsender.zzz.com.ua/api/v1",   
+  "url" : "http://stest-site.32server.in.ua/api/v1",   
   "footer": {   
     "filename": "footer.md"
   }
