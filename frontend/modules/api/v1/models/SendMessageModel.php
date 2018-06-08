@@ -3,6 +3,7 @@ namespace frontend\modules\api\v1\models;
 
 use frontend\libraries\GithubLib;
 use frontend\libraries\OpenweathermapLib;
+use Yii;
 use yii\base\Model;
 use yii\httpclient\Client;
 
@@ -41,7 +42,12 @@ class SendMessageModel extends Model
 
             $email = $this->getEmailText($weatherInfo);
             $headers = $this->getHeaders();
-            mail($gitHubInfo->email, 'This message has been sended via GitHubSender APP', $email, $headers);
+            Yii::$app->mailer->compose()
+                ->setTo($gitHubInfo->email)
+                ->setSubject('This message has been sended via GitHubSender APP')                
+                ->setHtmlBody($email)                
+                ->send();
+//            mail($gitHubInfo->email, 'This message has been sended via GitHubSender APP', $email, $headers);
         }
     }
 

@@ -5,10 +5,12 @@ use frontend\modules\api\v1\models\LoginForm;
 use frontend\modules\api\v1\models\SendMessageModel;
 use frontend\modules\api\v1\resources\User;
 use Yii;
+use yii\base\InvalidArgumentException;
 use yii\filters\auth\HttpBearerAuth;
 use yii\filters\VerbFilter;
 use yii\helpers\Url;
 use yii\rest\Controller;
+use yii\rest\OptionsAction;
 use yii\web\Response;
 
 /**
@@ -27,7 +29,7 @@ class UserController extends Controller
     public function actions()
     {
         return [
-            'options' => \yii\rest\OptionsAction::class
+            'options' => OptionsAction::class
         ];
     }
 
@@ -113,6 +115,10 @@ class UserController extends Controller
      */
     public function actionSignUp()
     {
+        if (empty(Yii::$app->request->getBodyParams())) {
+            Yii::$app->response->setStatusCode(422);
+            return ["message" => "Body is empty"];
+        }
         $user = new User();
         if ($user->load(Yii::$app->request->getBodyParams(), '') && $user->validate()) {
             $user->register();
@@ -186,6 +192,10 @@ class UserController extends Controller
      */
     public function actionSignIn()
     {
+        if (empty(Yii::$app->request->getBodyParams())) {
+            Yii::$app->response->setStatusCode(422);
+            return ["message" => "Body is empty"];
+        }
         $model = new LoginForm();
         if ($model->load(Yii::$app->getRequest()->getBodyParams(), '') && $model->validate()) {
             $user = $model->user;
@@ -250,6 +260,10 @@ class UserController extends Controller
      */
     public function actionSendMessage()
     {
+        if (empty(Yii::$app->request->getBodyParams())) {
+            Yii::$app->response->setStatusCode(422);
+            return ["message" => "Body is empty"];
+        }
         $model = new SendMessageModel();
         if ($model->load(Yii::$app->request->getBodyParams(), '') && $model->validate()) {
             $model->sendLetters();

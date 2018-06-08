@@ -185,11 +185,13 @@ $config = [
 ];
 
 if (YII_ENV_PROD) {
-    $config['components']['log']['targets']['email'] = [
-        'class' => yii\log\EmailTarget::class,
-        'except' => ['yii\web\HttpException:*'],
-        'levels' => ['error', 'warning'],
-        'message' => ['from' => env('ROBOT_EMAIL'), 'to' => env('ADMIN_EMAIL')]
+    $config['components']['mailer']['transport'] = [
+        'class' => 'Swift_SmtpTransport',
+        'host' => 'smtp.gmail.com',
+        'port' => env('SMTP_PORT'),
+        'encryption' => 'tls',
+        'username' => env('ROBOT_EMAIL'),
+        'password' => env('SMTP_PASSWORD'),
     ];
 }
 
