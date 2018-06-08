@@ -31,6 +31,9 @@ class GithubLib
                 ])
             ->setUrl($this->apiUrl . $username)
             ->send();       
+        echo '<pre>';
+        print_r($response);
+        die();
         if($response->isOk) {
             return json_decode($response->content);
         }

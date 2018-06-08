@@ -18,6 +18,7 @@ return [
                 'POST send-message' => 'send-message',
                 'POST sign-up' => 'sign-up',
                 'POST sign-in' => 'sign-in'
+                
             ]
             
         ],  
